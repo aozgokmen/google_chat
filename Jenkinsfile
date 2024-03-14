@@ -6,8 +6,8 @@ pipeline {
         SCHEDULE_IDENTIFIER = credentials('SCHEDULE_IDENTIFIER')
         GOOGLE_CHAT_WEBHOOK_URL = credentials('GOOGLE_CHAT_WEBHOOK_URL')
         // Diğer değişkenleri ekleyin, örnek:
-        // GITHUB_INFO = credentials('github_info')
-        // DOCKER_INFO = credentials('docker_info')
+        GITHUB_INFO = credentials('github_info')
+        DOCKER_INFO = credentials('docker_info')
     }
     stages {
         stage('Checkout') {
