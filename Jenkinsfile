@@ -5,15 +5,14 @@ pipeline {
         OPSGENIE_API_KEY = credentials('OPSGENIE_API_KEY')
         SCHEDULE_IDENTIFIER = credentials('SCHEDULE_IDENTIFIER')
         GOOGLE_CHAT_WEBHOOK_URL = credentials('GOOGLE_CHAT_WEBHOOK_URL')
-        // Diğer değişkenleri ekleyin, örnek:
         GITHUB_INFO = credentials('github_info')
         DOCKER_INFO = credentials('docker_info')
     }
     stages {
         stage('Checkout') {
             steps {
-                // GitHub'dan kod çekme
-                git url: 'https://github.com/aozgokmen/google_chat.git', credentialsId: 'github_info'
+                // GitHub'dan main branch kod çekme
+                git url: 'https://github.com/aozgokmen/google_chat.git', branch: 'main', credentialsId: 'github_info'
             }
         }
         stage('Load Environment Variables') {
@@ -24,20 +23,31 @@ pipeline {
                     sh 'echo SCHEDULE_IDENTIFIER=$SCHEDULE_IDENTIFIER >> .env'
                     sh 'echo GOOGLE_CHAT_WEBHOOK_URL=$GOOGLE_CHAT_WEBHOOK_URL >> .env'
                     // Diğer ortam değişkenlerini ekleyin
+                    // Bu şekilde oluşturulan .env dosyası Docker içinde kullanılabilir
                 }
             }
         }
         stage('Build Docker Image') {
             steps {
-                // Docker image'ını build etme ve çalıştırma
+                // Docker image'ını build etme
+                // Dockerfile'ın konumunu kontrol edin; varsayılan olarak projenizin kök dizininde olmalıdır.
                 sh 'docker build -t your-app-name .'
             }
         }
         stage('Deploy') {
             steps {
                 // Docker container'ını çalıştırma
+                // -d: detached modunda çalıştırır
+                // --env-file: Environment variables'ları kullanır
                 sh 'docker run --env-file .env -d your-app-name'
             }
+        }
+    }
+    post {
+        always {
+            // Script sonunda temizlik işlemleri yapılır
+            // Örneğin: build edilen Docker image'ını silme, geçici dosyaları temizleme vs.
+            sh 'echo "Clean up actions"'
         }
     }
 }
