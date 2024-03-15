@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/aozgokmen/google_chat.git', credentialsId: 'github_info'
+                git url: 'https://github.com/aozgokmen/google_chat.git', credentialsId: 'github_info' , branch: 'main'
             }
         }
         stage('Load Environment Variables') {
