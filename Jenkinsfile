@@ -11,6 +11,8 @@ pipeline {
                 script {
                     // Docker imajını build edin ve bir değişkene atayın
                     def appImage = docker.build("my-app:latest", ".")
+                    sh 'docker build --no-cache --progress=plain -t my-app:latest .'
+
                 }
             }
         }
