@@ -25,6 +25,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t my-app:latest .'
+                sh 'docker build --progress=plain -t my-app:latest .'
             }
         }
         stage('Deploy') {
@@ -33,6 +34,7 @@ pipeline {
                 sh 'docker run --name my-app-container -e OPSGENIE_API_KEY -e SCHEDULE_IDENTIFIER -e GOOGLE_CHAT_WEBHOOK_URL -d my-app:latest'
                 sh 'docker ps' // Çalışan container'ları göster
                 sh 'docker logs my-app-container' // Logları yazdır
+                
             }
         }
     }
