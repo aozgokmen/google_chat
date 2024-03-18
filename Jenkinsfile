@@ -6,27 +6,14 @@ pipeline {
                 git url: 'https://github.com/aozgokmen/google_chat.git', credentialsId: 'github_info', branch: 'main'
             }
         }
-        stage('Docker Check') {
-            steps {
-                script {
-                    // Docker versiyonunu kontrol et
-                    sh 'docker --version'
-                    
-                    // Çalışan Docker konteynerlarını listele
-                    sh 'docker ps'
-                    
-                    // Mevcut Docker imajlarını listele
-                    sh 'docker images'
-                }
-            }
-        }
         stage('Prepare Environment') {
             steps {
                 script {
                     withCredentials([
                         string(credentialsId: 'OPSGENIE_API_KEY', variable: 'OPSGENIE_KEY'),
                         string(credentialsId: 'SCHEDULE_IDENTIFIER', variable: 'SCHEDULE_ID'),
-                        string(credentialsId: 'GOOGLE_CHAT_WEBHOOK_URL', variable: 'CHAT_WEBHOOK')
+                        string(credentialsId: 'GOOGLE_CHAT_WEBHOOK_URL', variable: 'CHAT_WEBHOOK'),
+                        usernamePassword(credentialsId: 'docker_hub_credentials', usernameVariable: 'ahmetcan114', passwordVariable: 'aHNW2zvg')
                     ]) {
                         env.OPSGENIE_API_KEY = OPSGENIE_KEY
                         env.SCHEDULE_IDENTIFIER = SCHEDULE_ID
@@ -37,22 +24,31 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t my-app:latest .'
+                script {
+                    // Docker Image'ı build et
+                    sh 'docker build -t ahmetcan114/chat .'
+                    // Docker Hub'a login ol
+                    sh 'echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin'
+                    // Docker Image'ını Docker Hub'a push et
+                    sh 'docker push ahmetcan114/chat'
+                }
             }
         }
-        stage('Deploy') {
+        stage('Deploy to Kubernetes') {
             steps {
-                sh 'docker run --name my-app-container -d my-app:latest'
-                sh 'docker ps'
-                sh 'docker logs my-app-container'
+                script {
+                    // GitHub'dan çekilen kod içerisindeki Kubernetes deployment dosyasını uygula
+                    sh 'kubectl apply -f deployment.yaml'
+                }
             }
         }
     }
     post {
         always {
+            // İşlemler bittikten sonra konteyner ve image'ları temizle
             sh 'docker stop my-app-container || true'
             sh 'docker rm my-app-container || true'
-            sh 'docker rmi my-app:latest || true'
+            sh 'docker rmi ahmetcan114/chat || true'
         }
     }
 }
