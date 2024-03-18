@@ -13,7 +13,7 @@ pipeline {
                         string(credentialsId: 'OPSGENIE_API_KEY', variable: 'OPSGENIE_KEY'),
                         string(credentialsId: 'SCHEDULE_IDENTIFIER', variable: 'SCHEDULE_ID'),
                         string(credentialsId: 'GOOGLE_CHAT_WEBHOOK_URL', variable: 'CHAT_WEBHOOK'),
-                        usernamePassword(credentialsId: 'docker_hub_credentials', usernameVariable: 'ahmetcan114', passwordVariable: 'aHNW2zvg')
+                        usernamePassword(credentialsId: 'my_docker_hub_credentials', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')
                     ]) {
                         env.OPSGENIE_API_KEY = OPSGENIE_KEY
                         env.SCHEDULE_IDENTIFIER = SCHEDULE_ID
