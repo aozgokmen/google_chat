@@ -42,8 +42,8 @@ pipeline {
     post {
         always {
             // İşlemler bittikten sonra konteyner ve image'ları temizle
-            sh 'docker stop my-app-container || true'
-            sh 'docker rm my-app-container || true'
+            sh 'docker stop chat-container || true'
+            sh 'docker rm chat-container || true'
             sh 'docker rmi ahmetcan114/chat || true'
         }
     }
