@@ -13,7 +13,6 @@ pipeline {
                         string(credentialsId: 'OPSGENIE_API_KEY', variable: 'OPSGENIE_KEY'),
                         string(credentialsId: 'SCHEDULE_IDENTIFIER', variable: 'SCHEDULE_ID'),
                         string(credentialsId: 'GOOGLE_CHAT_WEBHOOK_URL', variable: 'CHAT_WEBHOOK'),
-                        usernamePassword(credentialsId: 'my_docker_hub_credentials', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')
                     ]) {
                         env.OPSGENIE_API_KEY = OPSGENIE_KEY
                         env.SCHEDULE_IDENTIFIER = SCHEDULE_ID
@@ -28,9 +27,6 @@ pipeline {
                     // Docker Image'ı build et
                     sh 'docker build -t ahmetcan114/chat .'
                     // Docker Hub'a login ol
-                    sh 'echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin'
-                    // Docker Image'ını Docker Hub'a push et
-                    sh 'docker push ahmetcan114/chat'
                 }
             }
         }
