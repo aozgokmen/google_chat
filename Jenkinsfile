@@ -25,13 +25,14 @@ pipeline {
             steps {
                 script {
                     // Docker Image'ı build et
-                    sh 'docker build -t ahmetcan114/chat .'
+                    sh 'docker build -t harbor.sdpaas.com/ahmetcan114/chat:latest .
+'
                     // Harbor'a login ol
                     withCredentials([usernamePassword(credentialsId: 'harbor_credentials', usernameVariable: 'HARBOR_USERNAME', passwordVariable: 'HARBOR_PASSWORD')]) {
                         sh 'docker login harbor.sdpaas.com -u $HARBOR_USERNAME -p $HARBOR_PASSWORD'
                     }
                     // Image'ı Harbor'a push et
-                    sh 'docker push harbor.sdpaas.com/ahmetcan114/chat'
+                    sh 'docker push harbor.sdpaas.com/ahmetcan114/chat:latest'
                 }
             }
         }
