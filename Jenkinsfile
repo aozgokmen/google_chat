@@ -26,7 +26,12 @@ pipeline {
                 script {
                     // Docker Image'ı build et
                     sh 'docker build -t ahmetcan114/chat .'
-                    // Docker Hub'a login ol
+                    // Harbor'a login ol
+                    withCredentials([usernamePassword(credentialsId: 'harbor_credentials', usernameVariable: 'HARBOR_USERNAME', passwordVariable: 'HARBOR_PASSWORD')]) {
+                        sh 'docker login myharborregistry.com -u $HARBOR_USERNAME -p $HARBOR_PASSWORD'
+                    }
+                    // Image'ı Harbor'a push et
+                    sh 'docker push myharborregistry.com/ahmetcan114/chat'
                 }
             }
         }
@@ -45,6 +50,7 @@ pipeline {
             sh 'docker stop chat-container || true'
             sh 'docker rm chat-container || true'
             sh 'docker rmi ahmetcan114/chat || true'
+            // Harbor'a pushladığın image'ı temizleme adımını burada ekleyebilirsin, ancak genellikle bu adım Jenkins üzerinde yapılmaz
         }
     }
 }
