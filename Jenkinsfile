@@ -28,10 +28,10 @@ pipeline {
                     sh 'docker build -t ahmetcan114/chat .'
                     // Harbor'a login ol
                     withCredentials([usernamePassword(credentialsId: 'harbor_credentials', usernameVariable: 'HARBOR_USERNAME', passwordVariable: 'HARBOR_PASSWORD')]) {
-                        sh 'docker login myharborregistry.com -u $HARBOR_USERNAME -p $HARBOR_PASSWORD'
+                        sh 'docker login harbor.sdpaas.com -u $HARBOR_USERNAME -p $HARBOR_PASSWORD'
                     }
                     // Image'ı Harbor'a push et
-                    sh 'docker push myharborregistry.com/ahmetcan114/chat'
+                    sh 'docker push harbor.sdpaas.com/ahmetcan114/chat'
                 }
             }
         }
