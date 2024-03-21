@@ -25,13 +25,13 @@ pipeline {
             steps {
                 script {
                     // Docker Image'ı build et
-                    sh 'docker build -t harbor.sdpaas.com:6443/devops/ahmetcan114/chat:v1.0 .'
+                    sh 'docker build -t harbor.sdpaas.com/devops/chat:v1.0 .'
                     // Harbor'a login ol
                     withCredentials([usernamePassword(credentialsId: 'harbor_credentials', usernameVariable: 'HARBOR_USERNAME', passwordVariable: 'HARBOR_PASSWORD')]) {
                         sh 'docker login harbor.sdpaas.com -u $HARBOR_USERNAME -p $HARBOR_PASSWORD'
                     }
                     // Image'ı Harbor'a push et
-                    sh 'docker push harbor.sdpaas.com:6443/devops/ahmetcan114/chat:v1.0'
+                    sh 'docker push harbor.sdpaas.com/devops/chat:v1.0'
                 }
             }
         }
@@ -49,10 +49,8 @@ pipeline {
             // İşlemler bittikten sonra konteyner ve image'ları temizle
             sh 'docker stop chat-container || true'
             sh 'docker rm chat-container || true'
-            sh 'docker rmi ahmetcan114/chat || true'
+            sh 'docker rmi chat || true'
             // Harbor'a pushladığın image'ı temizleme adımını burada ekleyebilirsin, ancak genellikle bu adım Jenkins üzerinde yapılmaz
         }
     }
 }
-
-
