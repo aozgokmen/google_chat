@@ -35,8 +35,8 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    sh 'helm upgrade --install my-cronjob-release . --namespace monitoring --values values.yaml'
-        }
+                    sh 'helm upgrade --install chatbot-exporter-scraper . --namespace monitoring --set image.repository=harbor.sdpaas.com/devops/chat,image.tag=v1.0'
+
                 }
             }
         }
