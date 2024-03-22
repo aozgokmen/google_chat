@@ -35,7 +35,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    sh 'helm upgrade --install chatbot-exporter-scraper helm -f helm/values.yaml -n'
+                    sh 'helm upgrade --install chatbot-exporter-scraper helm -f helm/values.yaml -n monitoring'
 
                 }
             }
