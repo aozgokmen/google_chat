@@ -35,7 +35,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    sh 'helm upgrade --install chatbot-exporter-scraper . --namespace monitoring --set image.repository=harbor.sdpaas.com/devops/chat,image.tag=v1.0'
+                    sh 'helm upgrade --install chatbot-exporter-scraper helm -f helm/values.yaml -n'
 
                 }
             }
