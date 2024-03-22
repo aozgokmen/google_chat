@@ -18,5 +18,9 @@ name: chat-bot  # Container ve diğer k8s kaynaklarının adı
 
 security:
   enabled: true
+# values.yaml dosyanızda bu bölümü bulun veya ekleyin
+service:
+  type: ClusterIP
+  port: 80  # Ya da uygulamanız için uygun olan port numarası
 
 # Diğer yapılandırmalar önceki values.yaml dosyasından korunuyor olabilir.
