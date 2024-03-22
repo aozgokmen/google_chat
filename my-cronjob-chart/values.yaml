@@ -1,0 +1,13 @@
+cronjob:
+  name: my-cronjob
+  schedule: "*/5 * * * *"
+image:
+  repository: harbor.sdpaas.com/devops/chat
+  tag: v1.0
+container:
+  name: my-container
+env:
+  OPSGENIE_API_KEY: "your-opsgenie-api-key"
+  SCHEDULE_IDENTIFIER: "your-schedule-identifier"
+  GOOGLE_CHAT_WEBHOOK_URL: "your-google-chat-webhook-url"
+

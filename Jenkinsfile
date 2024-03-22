@@ -24,13 +24,10 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Docker Image'ı build et
                     sh 'docker build -t harbor.sdpaas.com/devops/chat:v1.0 .'
-                    // Harbor'a login ol
                     withCredentials([usernamePassword(credentialsId: 'harbor_credentials', usernameVariable: 'HARBOR_USERNAME', passwordVariable: 'HARBOR_PASSWORD')]) {
                         sh 'docker login harbor.sdpaas.com -u $HARBOR_USERNAME -p $HARBOR_PASSWORD'
                     }
-                    // Image'ı Harbor'a push et
                     sh 'docker push harbor.sdpaas.com/devops/chat:v1.0'
                 }
             }
@@ -38,8 +35,8 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    // GitHub'dan çekilen kod içerisindeki Kubernetes deployment dosyasını uygula
-                    sh 'kubectl apply -f deployment.yaml'
+                    sh 'helm upgrade --install my-cronjob-release . --namespace monitoring --values values.yaml'
+        }
                 }
             }
         }
@@ -49,8 +46,7 @@ pipeline {
             // İşlemler bittikten sonra konteyner ve image'ları temizle
             sh 'docker stop chat-container || true'
             sh 'docker rm chat-container || true'
-            sh 'docker rmi chat || true'
-            // Harbor'a pushladığın image'ı temizleme adımını burada ekleyebilirsin, ancak genellikle bu adım Jenkins üzerinde yapılmaz
+            sh 'docker rmi harbor.sdpaas.com/devops/chat:v1.0 || true'
         }
     }
 }

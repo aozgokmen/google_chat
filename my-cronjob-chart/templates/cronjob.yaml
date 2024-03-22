@@ -1,0 +1,22 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ .Values.cronjob.name }}
+spec:
+  schedule: "{{ .Values.cronjob.schedule }}"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: {{ .Values.container.name }}
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            env:
+            - name: OPSGENIE_API_KEY
+              value: {{ .Values.env.OPSGENIE_API_KEY }}
+            - name: SCHEDULE_IDENTIFIER
+              value: {{ .Values.env.SCHEDULE_IDENTIFIER }}
+            - name: GOOGLE_CHAT_WEBHOOK_URL
+              value: {{ .Values.env.GOOGLE_CHAT_WEBHOOK_URL }}
+          restartPolicy: OnFailure
+
