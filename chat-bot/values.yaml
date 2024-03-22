@@ -1,0 +1,20 @@
+# values.yaml
+image:
+  repository: harbor.sdpaas.com/devops/chat
+  tag: "v1.0"
+  pullPolicy: IfNotPresent
+
+env:
+  opsgenieApiKey: "your-opsgenie-api-key"
+  scheduleIdentifier: "your-schedule-identifier"
+  googleChatWebhookUrl: "your-google-chat-webhook-url"
+
+service:
+  type: ClusterIP
+  port: 80
+
+cronJob:
+  schedule: "*/5 * * * *"
+  restartPolicy: OnFailure
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
