@@ -24,3 +24,20 @@ service:
   port: 80  # Ya da uygulamanız için uygun olan port numarası
 
 # Diğer yapılandırmalar önceki values.yaml dosyasından korunuyor olabilir.
+# values.yaml dosyasına eklenecek yapı
+serviceAccount:
+  # Bu değer true ise, bir service account oluşturulur.
+  # Bu değer false ise, bir service account oluşturulmaz.
+  create: true
+
+  # Eğer 'create' değeri true ise ve 'name' boş bırakılmışsa,
+  # bir isim otomatik olarak üretilir. İsteğe bağlı bir isim belirleyebilirsiniz.
+  name: ""
+ingress:
+  enabled: false  # Eğer Ingress kullanmayacaksanız false olarak bırakın
+  # Eğer Ingress kullanacaksanız enabled: true yapın ve aşağıdakileri yapılandırın
+  # annotations: {}
+  # hosts:
+  #   - host: chart-example.local
+  #     paths: []
+  # tls: []
