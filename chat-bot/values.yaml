@@ -4,12 +4,6 @@ image:
   tag: "v1.0"  # Docker imajının tag'ı
   pullPolicy: IfNotPresent  # İmaj zaten varsa çekme
 
-# Ortam değişkenleri Jenkinsfile'daki 'Prepare Environment' adımından alındı
-env:
-  opsgenieApiKey: "ad2acbe3-5ac2-43c3-8d3c-0fb5cb6e8df0"
-  scheduleIdentifier: "420fff69-6a99-4bfa-b442-7a7931b374f9"
-  googleChatWebhookUrl: "https://chat.googleapis.com/v1/spaces/AAAA62gx8E4/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=4RMRAmOyLduL4dVY8kj8yhQD834mD_4X4SLbFUN3N2s"
-
 # Jenkinsfile'da bahsedilmeyen diğer değişkenler varsayılan olarak ayarlandı
 schedule: "*/5 * * * *"  # CronJob çalışma sıklığını belirleyin
 namespace: monitoring  # Kubernetes namespace
