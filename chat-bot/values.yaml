@@ -1,26 +1,21 @@
-# Yeni values.yaml
-image:
-  repository: harbor.sdpaas.com/devops/chat  # Jenkinsfile'da belirtildiği gibi
-  tag: "v1.0"  # Docker imajının tag'ı
-  pullPolicy: IfNotPresent  # İmaj zaten varsa çekme
 
-# Jenkinsfile'da bahsedilmeyen diğer değişkenler varsayılan olarak ayarlandı
-schedule: "*/5 * * * *"  # CronJob çalışma sıklığını belirleyin
-namespace: monitoring  # Kubernetes namespace
-name: chat-bot  # Container ve diğer k8s kaynaklarının adı
-# chat-bot/values.yaml
+image:
+  repository: harbor.sdpaas.com/devops/chat
+  tag: "v1.0" 
+  pullPolicy: IfNotPresent
+
+schedule: "*/5 * * * *"  
+namespace: monitoring  
+name: chat-bot
 
 serviceAccount:
-  # Eğer true ise, bir ServiceAccount oluşturulur
   create: true
-  # ServiceAccount için özel bir isim belirleyebilirsiniz. Boş bırakırsanız, Helm bir isim üretir.
   name: chat-bot-service-account
 
 security:
   enabled: true
-# values.yaml dosyanızda bu bölümü bulun veya ekleyin
+
 service:
   type: ClusterIP
-  port: 80  # Ya da uygulamanız için uygun olan port numarası
 
 
