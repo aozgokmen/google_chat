@@ -11,10 +11,16 @@ env:
   googleChatWebhookUrl: "https://chat.googleapis.com/v1/spaces/AAAA62gx8E4/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=4RMRAmOyLduL4dVY8kj8yhQD834mD_4X4SLbFUN3N2s"
 
 # Jenkinsfile'da bahsedilmeyen diğer değişkenler varsayılan olarak ayarlandı
-serviceAccountName: chat-bot-service-account
 schedule: "*/5 * * * *"  # CronJob çalışma sıklığını belirleyin
 namespace: monitoring  # Kubernetes namespace
 name: chat-bot  # Container ve diğer k8s kaynaklarının adı
+# chat-bot/values.yaml
+
+serviceAccount:
+  # Eğer true ise, bir ServiceAccount oluşturulur
+  create: true
+  # ServiceAccount için özel bir isim belirleyebilirsiniz. Boş bırakırsanız, Helm bir isim üretir.
+  name: chat-bot-service-account
 
 security:
   enabled: true
