@@ -1,20 +1,28 @@
 
 image:
-  repository: harbor.sdpaas.com/devops/chat
-  tag: "v1.0" 
-  pullPolicy: IfNotPresent
+  repository: harbor.sdpaas.com/devops/chat  
+  tag: "v1.0"  
+  pullPolicy: IfNotPresent  
 
 
 schedule: "*/5 * * * *"  
+
+
 namespace: monitoring  
+
+
 name: chat-bot  
+
+
 serviceAccount:
-  create: true
-  name: chat-bot-service-account
+  create: true  
+  name: chat-bot-service-account  
+
+
 security:
-  enabled: true
+  enabled: true  
+
+
 service:
-  type: ClusterIP
+  type: ClusterIP  
   port: 80  
-
-
