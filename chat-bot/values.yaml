@@ -4,18 +4,17 @@ image:
   tag: "v1.0" 
   pullPolicy: IfNotPresent
 
+
 schedule: "*/5 * * * *"  
 namespace: monitoring  
-name: chat-bot
-
+name: chat-bot  
 serviceAccount:
   create: true
   name: chat-bot-service-account
-
 security:
   enabled: true
-
 service:
   type: ClusterIP
+  port: 80  
 
 
