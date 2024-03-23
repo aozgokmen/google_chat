@@ -11,7 +11,7 @@ env:
   googleChatWebhookUrl: "https://chat.googleapis.com/v1/spaces/AAAA62gx8E4/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=4RMRAmOyLduL4dVY8kj8yhQD834mD_4X4SLbFUN3N2s"
 
 # Jenkinsfile'da bahsedilmeyen diğer değişkenler varsayılan olarak ayarlandı
-serviceAccountName: chat-bot-service-account
+serviceAccountName: chat-bot-v1
 schedule: "*/5 * * * *"  # CronJob çalışma sıklığını belirleyin
 namespace: monitoring  # Kubernetes namespace
 name: chat-bot  # Container ve diğer k8s kaynaklarının adı
@@ -23,21 +23,4 @@ service:
   type: ClusterIP
   port: 80  # Ya da uygulamanız için uygun olan port numarası
 
-# Diğer yapılandırmalar önceki values.yaml dosyasından korunuyor olabilir.
-# values.yaml dosyasına eklenecek yapı
-serviceAccount:
-  # Bu değer true ise, bir service account oluşturulur.
-  # Bu değer false ise, bir service account oluşturulmaz.
-  create: true
 
-  # Eğer 'create' değeri true ise ve 'name' boş bırakılmışsa,
-  # bir isim otomatik olarak üretilir. İsteğe bağlı bir isim belirleyebilirsiniz.
-  name: ""
-ingress:
-  enabled: false  # Eğer Ingress kullanmayacaksanız false olarak bırakın
-  # Eğer Ingress kullanacaksanız enabled: true yapın ve aşağıdakileri yapılandırın
-  # annotations: {}
-  # hosts:
-  #   - host: chart-example.local
-  #     paths: []
-  # tls: []
