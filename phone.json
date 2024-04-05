@@ -1,0 +1,8 @@
+{
+    "users": [
+        {"fullName": "Durul Şengün", "phoneNumber": "0534 798 59 72"},
+        {"fullName": "Sefa Aydınelli", "phoneNumber": "0530 762 51 70"},
+        {"fullName": "Mehmet Eraslan", "phoneNumber": "0539 351 28 00"},
+        {"fullName": "Harun Demirci", "phoneNumber": "+2468101214"}
+    ]
+}

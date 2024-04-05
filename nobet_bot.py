@@ -2,19 +2,24 @@ import requests
 from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 import os
+import json
 
-# .env dosyasındaki değişkenleri yükle
 load_dotenv()
 
-# OpsGenie API anahtarını ve diğer bilgileri .env dosyasından al
+def load_phone_numbers():
+    with open('phone.json', 'r') as file:
+        data = json.load(file)
+    return data["users"]
+
+
 api_key = os.getenv('OPSGENIE_API_KEY')
 schedule_identifier = os.getenv('SCHEDULE_IDENTIFIER')
 
-# OpsGenie API endpoint'leri
+
 schedule_url_today = f'https://api.opsgenie.com/v2/schedules/{schedule_identifier}/on-calls'
 users_base_url = 'https://api.opsgenie.com/v2/users/'
 
-# Google Chat webhook URL'ini .env dosyasından al
+
 google_chat_webhook_url = os.getenv('GOOGLE_CHAT_WEBHOOK_URL')
 
 def send_message_to_google_chat(webhook_url, message):
@@ -32,7 +37,7 @@ def adjust_current_time_based_on_rotation(api_key, schedule_identifier):
         response_json = response.json()
         rotation_type = response_json['data'][0]['type']
 
-        # Zaman dilimi bilincine sahip datetime nesnesi kullan
+       
         current_time = datetime.now(timezone.utc)
 
         if rotation_type == 'daily':
@@ -51,9 +56,10 @@ def adjust_current_time_based_on_rotation(api_key, schedule_identifier):
         return None
 
 def main():
-    new_time = adjust_current_time_based_on_rotation(api_key, schedule_identifier)
     
-    # Zaman dilimi bilincine sahip datetime nesnesi kullan
+    phone_numbers = load_phone_numbers()
+
+    new_time = adjust_current_time_based_on_rotation(api_key, schedule_identifier)
     current_time = datetime.now(timezone.utc).isoformat()
     
     date_obj = datetime.strptime(current_time, '%Y-%m-%dT%H:%M:%S.%f%z')
@@ -70,23 +76,26 @@ def main():
         if response_user.status_code == 200:
             user_info = response_user.json()
             full_name = user_info['data']['fullName']
-            username = user_info['data']['username']
-
-            message_to_send = f"""
-            Nöbetçi kullanıcı bilgileri
-
-            👤 İsim: {full_name}
-            📧 E-mail Adresi: {username}
-            🗓️ Nöbet Başlangıcı: {today_date}
-            🏁 Nöbet Bitişi: {new_time}    
-            """
             
-            send_message_to_google_chat(google_chat_webhook_url, message_to_send)
+            phone_number = next((user['phoneNumber'] for user in phone_numbers if user['fullName'] == full_name), None)
 
+            if phone_number:
+
+                message_to_send = f"""
+                Nöbetçi kullanıcı bilgileri
+
+                👤 İsim: {full_name}
+                📞 Telefon Numarası: {phone_number}
+                🗓️ Nöbet Başlangıcı: {today_date}
+                🏁 Nöbet Bitişi: {new_time}    
+                """
+                
+                send_message_to_google_chat(google_chat_webhook_url, message_to_send)
+                
+            else:
+                print('Bugünkü nöbetçi kullanıcı bilgilerini alırken bir hata oluştu:', response_user.text)
         else:
-            print('Bugünkü nöbetçi kullanıcı bilgilerini alırken bir hata oluştu:', response_user.text)
-    else:
-        print('Bugünkü nöbetçi kullanıcı ID bilgisini alırken bir hata oluştu:', response.text)
+            print('Bugünkü nöbetçi kullanıcı ID bilgisini alırken bir hata oluştu:', response.text)
 
 if __name__ == '__main__':
     main()
